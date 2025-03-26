@@ -1,11 +1,27 @@
+/* Fonte personalizada do Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Roboto:wght@300;400&display=swap');
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     text-align: center;
-    background-color: #f8f8f8;
+    background: linear-gradient(to bottom, #ff9a9e, #fad0c4);
+    color: #fff;
+    margin: 0;
+    padding: 0;
 }
 
 h1 {
-    color: #e91e63;
+    font-family: 'Dancing Script', cursive;
+    font-size: 3rem;
+    margin-top: 20px;
+    color: #fff;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
 }
 
 .timeline {
@@ -18,22 +34,53 @@ h1 {
 .event {
     background: white;
     padding: 15px;
-    margin: 10px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 15px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     width: 80%;
     max-width: 400px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.event:hover {
+    transform: scale(1.05);
 }
 
 .event img {
     width: 100%;
-    border-radius: 10px;
+    border-radius: 12px;
+}
+
+h2 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2rem;
+    color: #e91e63;
+    margin-top: 10px;
+}
+
+p {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 10px;
 }
 
 .qr-container {
     margin-top: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+.qr-container p {
+    color: #fff;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
 }
 
 .qr-container img {
     width: 150px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
