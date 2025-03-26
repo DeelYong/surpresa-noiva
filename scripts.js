@@ -1,9 +1,14 @@
 let currentEvent = 1;
 
 function nextEvent(eventNumber) {
-    document.getElementById(`event${currentEvent}`).style.display = 'none'; // Esconde o evento atual
+    // Esconde o evento atual
+    document.getElementById(`event${currentEvent}`).style.display = 'none';
+    
+    // Atualiza o número do evento atual
     currentEvent = eventNumber;
-    document.getElementById(`event${currentEvent}`).style.display = 'block'; // Mostra o próximo evento
+    
+    // Mostra o próximo evento
+    document.getElementById(`event${currentEvent}`).style.display = 'block';
 }
 
 // Inicializa o primeiro evento visível
