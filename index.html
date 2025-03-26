@@ -3,37 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surpresa para Você ❤️</title>
+    <title>A Nossa História</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Surpresa para Você ❤️</h1>
-
+        <h1>A Nossa História</h1>
         <div class="timeline">
-            <div class="event">
+            <div class="event" id="event1">
                 <img src="https://raw.githubusercontent.com/DeelYong/surpresa-noiva/main/img/foto1.jpg" alt="Primeiro momento">
-                <h2>Primeiro momento</h2>
                 <p>Nosso primeiro encontro, um dia inesquecível!</p>
+                <button class="next-btn" onclick="nextEvent(2)">➡️</button>
             </div>
-
-            <div class="event">
-                <img src="https://raw.githubusercontent.com/DeelYong/surpresa-noiva/main/img/foto2.jpg" alt="Viagem">
-                <h2>Viagem</h2>
-                <p>Aquela viagem maravilhosa que fizemos juntos!</p>
+            <!-- Adicione eventos semelhantes para foto2 a foto9 -->
+            <div class="event" id="event10">
+                <img src="https://raw.githubusercontent.com/DeelYong/surpresa-noiva/main/img/foto10.jpg" alt="Última foto">
+                <p>O grande dia! Nosso amor sempre será eterno.</p>
+                <video controls>
+                    <source src="https://www.example.com/seu-video.mp4" type="video/mp4">
+                    Seu navegador não suporta vídeo.
+                </video>
             </div>
-
-            <div class="event">
-                <img src="https://raw.githubusercontent.com/DeelYong/surpresa-noiva/main/img/foto3.jpg" alt="Momento especial">
-                <h2>Momento especial</h2>
-                <p>Um dos momentos mais felizes da nossa história!</p>
-            </div>
-        </div>
-
-        <div class="qr-container">
-            <p>Escaneie o QR Code para uma surpresa especial!</p>
-            <img src="https://raw.githubusercontent.com/DeelYong/surpresa-noiva/main/img/qr_code.jpg" alt="QR Code">
         </div>
     </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
