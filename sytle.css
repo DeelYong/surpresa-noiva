@@ -36,9 +36,10 @@ h1 {
 }
 
 .event img {
-    width: 100%;
-    height: auto;
+    width: 100%; /* Faz com que a imagem ocupe toda a largura disponível */
+    height: auto; /* Mantém a proporção da imagem */
     border-radius: 8px;
+    object-fit: contain; /* Ajusta a imagem para se ajustar ao espaço sem distorcer */
 }
 
 .event p {
@@ -73,7 +74,7 @@ h1 {
 
     .event img {
         max-height: 300px;
-        object-fit: cover;
+        object-fit: contain;
     }
 
     .next-btn {
@@ -94,7 +95,7 @@ h1 {
 
     .event img {
         max-height: 250px;
-        object-fit: cover;
+        object-fit: contain;
     }
 
     .next-btn {
