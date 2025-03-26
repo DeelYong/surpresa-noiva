@@ -40,6 +40,7 @@ h1 {
     height: auto; /* Mantém a proporção da imagem */
     border-radius: 8px;
     object-fit: contain; /* Ajusta a imagem para se ajustar ao espaço sem distorcer */
+    max-height: 400px; /* Definindo a altura máxima da imagem */
 }
 
 .event p {
@@ -94,8 +95,9 @@ h1 {
     }
 
     .event img {
-        max-height: 250px;
-        object-fit: contain;
+        max-width: 100%; /* Faz a imagem ocupar 100% da largura da tela */
+        max-height: 250px; /* Limita a altura máxima da imagem para 250px */
+        object-fit: contain; /* Garante que a imagem não fique distorcida */
     }
 
     .next-btn {
