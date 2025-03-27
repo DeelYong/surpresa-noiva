@@ -1,38 +1,74 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Nossa História</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Nossa História</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>A Nossa História</h1>
-        <div class="timeline">
-            <div class="event" id="event1">
-                <img src="https://raw.githubusercontent.com/DeelYong/surpresa-noiva/main/img/foto1.jpg" alt="Primeiro momento">
-                <p>Nosso primeiro encontro, um dia inesquecível!</p>
-                <button class="next-btn" onclick="nextEvent(2)">➡️</button>
-            </div>
-            <div class="event" id="event2" style="display: none;">
-                <img src="https://raw.githubusercontent.com/DeelYong/surpresa-noiva/main/img/foto2.jpg" alt="Viagem">
-                <p>Aquela viagem maravilhosa que fizemos juntos!</p>
-                <button class="next-btn" onclick="nextEvent(3)">➡️</button>
-            </div>
-            <!-- Adicione mais eventos para as fotos 3 a 9 -->
-            <div class="event" id="event10" style="display: none;">
-                <img src="https://raw.githubusercontent.com/DeelYong/surpresa-noiva/main/img/foto10.jpg" alt="Última foto">
-                <p>O grande dia! Nosso amor sempre será eterno.</p>
-                <video controls>
-                    <source src="https://www.example.com/seu-video.mp4" type="video/mp4">
-                    Seu navegador não suporta vídeo.
-                </video>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-10 col-lg-8">
+                <div class="timeline-card">
+                    <div class="photo-section position-relative">
+                        <!-- Seta Anterior -->
+                        <button class="nav-arrow nav-prev" id="prevBtn">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        
+                        <!-- Container da Foto -->
+                        <div class="photo-container">
+                            <div id="photoPlaceholder" class="photo-placeholder">
+                                <p>Adicione suas fotos e frases especiais</p>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#photoModal">
+                                    Gerenciar Fotos e Frases
+                                </button>
+                            </div>
+                            <img id="currentPhoto" src="" alt="Foto do nosso relacionamento" style="display: none;">
+                        </div>
+
+                        <!-- Seta Próxima -->
+                        <button class="nav-arrow nav-next" id="nextBtn">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Legenda -->
+                    <div class="caption-container">
+                        <p id="caption" class="caption"></p>
+                        <div class="progress mt-3">
+                            <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Conectando o arquivo JavaScript -->
+    <!-- Modal para Gerenciar Fotos -->
+    <div class="modal fade" id="photoModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Gerenciar Fotos e Frases</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="photo-grid" id="photoGrid">
+                        <!-- Slots de fotos serão gerados via JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS e Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     <script src="script.js"></script>
 </body>
-</html>
+</html> 
