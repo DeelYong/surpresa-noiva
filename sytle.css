@@ -104,7 +104,7 @@ body {
 /* Modal Styles */
 .photo-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
     gap: 20px;
     padding: 20px;
 }
@@ -138,9 +138,7 @@ body {
 /* Ajustes para responsividade */
 @media (min-width: 768px) {
     .photo-grid {
-        display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
     }
     
     .photo-slot {
@@ -150,8 +148,7 @@ body {
 
 /* Estilo para o card */
 .card {
-    border: 1px solid rgba(0,0,0,.125);
-    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .card-body {
@@ -187,4 +184,20 @@ body {
 .upload-btn:hover {
     background-color: #ff5252;
     transform: scale(1.05);
+}
+
+.modal-dialog {
+    max-width: 90%;
+    margin: 1.75rem auto;
+}
+
+@media (min-width: 992px) {
+    .modal-dialog {
+        max-width: 800px;
+    }
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 15px;
 } 
