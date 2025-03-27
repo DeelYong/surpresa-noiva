@@ -1,78 +1,165 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nossa História</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-10 col-lg-8">
-                <div class="timeline-card">
-                    <div class="photo-section position-relative">
-                        <!-- Seta Anterior -->
-                        <button class="nav-arrow nav-prev" id="prevBtn">
-                            <i class="bi bi-chevron-left"></i>
-                        </button>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Script carregado');
+    
+    const photos = Array(10).fill(null); // Array para 10 fotos
+    let currentIndex = 0;
+
+    const currentPhoto = document.getElementById('currentPhoto');
+    const photoPlaceholder = document.getElementById('photoPlaceholder');
+    const caption = document.getElementById('caption');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const progressBar = document.getElementById('progressBar');
+    const photoGrid = document.getElementById('photoGrid');
+    const saveChangesBtn = document.getElementById('saveChanges');
+
+    // Inicializar grid de fotos no modal
+    function initPhotoGrid() {
+        photoGrid.innerHTML = '';
+        for (let i = 0; i < 10; i++) {
+            const slot = document.createElement('div');
+            slot.className = 'photo-slot';
+            slot.innerHTML = `
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Momento ${i + 1}</h5>
                         
-                        <!-- Container da Foto -->
-                        <div class="photo-container">
-                            <div id="photoPlaceholder" class="photo-placeholder">
-                                <p>Adicione suas fotos e frases especiais</p>
-                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#photoModal">
-                                    Gerenciar Fotos e Frases
+                        <div class="mb-3">
+                            <label class="form-label d-block">Foto</label>
+                            <div class="preview-container mb-2 ${photos[i]?.url ? '' : 'd-none'}">
+                                <img class="preview-image" src="${photos[i]?.url || ''}" alt="Preview">
+                            </div>
+                            <div class="d-flex gap-2">
+                                <input type="file" 
+                                    class="form-control" 
+                                    accept="image/*" 
+                                    data-index="${i}"
+                                    id="photo-${i}">
+                                <button class="btn btn-danger btn-remove-photo ${photos[i]?.url ? '' : 'd-none'}"
+                                    data-index="${i}">
+                                    <i class="bi bi-trash"></i>
                                 </button>
                             </div>
-                            <img id="currentPhoto" src="" alt="Foto do nosso relacionamento" style="display: none;">
                         </div>
-
-                        <!-- Seta Próxima -->
-                        <button class="nav-arrow nav-next" id="nextBtn">
-                            <i class="bi bi-chevron-right"></i>
-                        </button>
-                    </div>
-                    
-                    <!-- Legenda -->
-                    <div class="caption-container">
-                        <p id="caption" class="caption"></p>
-                        <div class="progress mt-3">
-                            <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Frase</label>
+                            <textarea class="form-control" 
+                                rows="2" 
+                                data-index="${i}"
+                                placeholder="Digite a frase para este momento...">${photos[i]?.caption || ''}</textarea>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
+            `;
+            photoGrid.appendChild(slot);
 
-    <!-- Modal para Gerenciar Fotos -->
-    <div class="modal fade" id="photoModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Gerenciar Fotos e Frases</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div id="photoGrid" class="photo-grid">
-                        <!-- Cards serão inseridos aqui via JavaScript -->
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary" id="saveChanges">Salvar Alterações</button>
-                </div>
-            </div>
-        </div>
-    </div>
+            // Eventos
+            const fileInput = slot.querySelector('input[type="file"]');
+            const textArea = slot.querySelector('textarea');
+            const removeBtn = slot.querySelector('.btn-remove-photo');
+            const previewContainer = slot.querySelector('.preview-container');
 
-    <!-- Bootstrap 5 JS e Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-    <script src="script.js"></script>
-</body>
-</html> 
+            fileInput.addEventListener('change', (e) => handleFileSelect(e, i, previewContainer, removeBtn));
+            textArea.addEventListener('input', (e) => handleCaptionInput(e, i));
+            removeBtn.addEventListener('click', () => handleRemovePhoto(i, fileInput, previewContainer, removeBtn));
+        }
+    }
+
+    function handleFileSelect(e, index, previewContainer, removeBtn) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                photos[index] = photos[index] || {};
+                photos[index].url = e.target.result;
+                
+                // Atualizar preview
+                const previewImg = previewContainer.querySelector('img');
+                previewImg.src = e.target.result;
+                previewContainer.classList.remove('d-none');
+                removeBtn.classList.remove('d-none');
+                
+                updateDisplay();
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function handleCaptionInput(e, index) {
+        photos[index] = photos[index] || {};
+        photos[index].caption = e.target.value;
+        updateDisplay();
+    }
+
+    function handleRemovePhoto(index, fileInput, previewContainer, removeBtn) {
+        if (photos[index]) {
+            photos[index].url = null;
+            fileInput.value = '';
+            previewContainer.classList.add('d-none');
+            removeBtn.classList.add('d-none');
+            updateDisplay();
+        }
+    }
+
+    function updateDisplay() {
+        const currentSlide = photos[currentIndex];
+        
+        if (currentSlide && currentSlide.url) {
+            photoPlaceholder.style.display = 'none';
+            currentPhoto.style.display = 'block';
+            currentPhoto.src = currentSlide.url;
+            caption.textContent = currentSlide.caption || '';
+        } else {
+            photoPlaceholder.style.display = 'flex';
+            currentPhoto.style.display = 'none';
+            caption.textContent = '';
+        }
+
+        // Atualizar barra de progresso
+        const progress = ((currentIndex + 1) / photos.length) * 100;
+        progressBar.style.width = `${progress}%`;
+
+        // Atualizar visibilidade das setas
+        const hasPhotos = photos.some(photo => photo !== null);
+        prevBtn.style.display = hasPhotos ? 'flex' : 'none';
+        nextBtn.style.display = hasPhotos ? 'flex' : 'none';
+    }
+
+    prevBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+        updateDisplay();
+    });
+
+    nextBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % photos.length;
+        updateDisplay();
+    });
+
+    // Inicializar
+    initPhotoGrid();
+    updateDisplay();
+
+    // Adicione estas funções no seu script.js
+    function savePhotos() {
+        localStorage.setItem('photos', JSON.stringify(photos));
+    }
+
+    function loadPhotos() {
+        const savedPhotos = localStorage.getItem('photos');
+        if (savedPhotos) {
+            photos = JSON.parse(savedPhotos);
+            updateDisplay();
+        }
+    }
+
+    // Adicione este evento ao botão de salvar
+    saveChangesBtn.addEventListener('click', () => {
+        savePhotos();
+        const modal = bootstrap.Modal.getInstance(document.getElementById('photoModal'));
+        modal.hide();
+    });
+
+    // Carregue as fotos quando a página iniciar
+    loadPhotos();
+}); 
