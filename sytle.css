@@ -1,111 +1,149 @@
-/* Estilo básico */
-body {
-    font-family: Arial, sans-serif;
+* {
     margin: 0;
     padding: 0;
-    background-color: #f0f0f0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
+    max-width: 800px;
     padding: 20px;
 }
 
-h1 {
-    text-align: center;
-    margin-bottom: 30px;
+.timeline-card {
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
-.timeline {
+.photo-section {
+    position: relative;
+    background-color: #f8f9fa;
+}
+
+.photo-container {
+    position: relative;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+}
+
+#currentPhoto {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s;
+}
+
+.nav-arrow:hover {
+    background-color: white;
+}
+
+.nav-prev {
+    left: 20px;
+}
+
+.nav-next {
+    right: 20px;
+}
+
+.caption-container {
+    padding: 20px;
+}
+
+.caption {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.photo-placeholder {
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    gap: 20px;
+    background-color: #e9ecef;
 }
 
-/* Estilo para cada evento */
-.event {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
+.progress {
+    height: 5px;
+}
+
+.progress-bar {
+    background-color: #ff6b6b;
+    transition: width 0.3s ease;
+}
+
+/* Modal Styles */
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
     padding: 20px;
-    text-align: center;
+}
+
+.photo-slot {
+    border: 2px dashed #dee2e6;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.photo-slot img {
     width: 100%;
-    max-width: 600px;
-}
-
-.event img {
-    width: 100%; /* Faz com que a imagem ocupe toda a largura disponível */
-    height: auto; /* Mantém a proporção da imagem */
-    border-radius: 8px;
-    object-fit: contain; /* Ajusta a imagem para se ajustar ao espaço sem distorcer */
-    max-height: 400px; /* Definindo a altura máxima da imagem */
-}
-
-.event p {
-    margin-top: 10px;
-    font-size: 18px;
-}
-
-.next-btn {
-    margin-top: 15px;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 10px;
     border-radius: 5px;
-    cursor: pointer;
 }
 
-.next-btn:hover {
-    background-color: #0056b3;
-}
-
-/* Media Query para tablet */
 @media (max-width: 768px) {
-    .timeline {
-        padding: 10px;
+    .nav-arrow {
+        width: 35px;
+        height: 35px;
     }
-
-    .event {
-        max-width: 90%;
-        margin-bottom: 20px;
-    }
-
-    .event img {
-        max-height: 300px;
-        object-fit: contain;
-    }
-
-    .next-btn {
-        padding: 8px 15px;
+    
+    .caption {
+        font-size: 1rem;
     }
 }
 
-/* Media Query para celular */
-@media (max-width: 480px) {
-    .timeline {
-        padding: 5px;
-    }
-
-    .event {
-        max-width: 100%;
-        margin-bottom: 15px;
-    }
-
-    .event img {
-        max-width: 100%; /* Faz a imagem ocupar 100% da largura da tela */
-        max-height: 250px; /* Limita a altura máxima da imagem para 250px */
-        object-fit: contain; /* Garante que a imagem não fique distorcida */
-    }
-
-    .next-btn {
-        padding: 6px 12px;
-        font-size: 14px;
-    }
-
-    h1 {
-        font-size: 24px;
-    }
+.upload-btn {
+    background-color: #ff6b6b;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.2s;
 }
+
+.upload-btn:hover {
+    background-color: #ff5252;
+    transform: scale(1.05);
+} 
