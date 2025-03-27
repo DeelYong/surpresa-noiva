@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Script carregado');
     
-    let photos = Array(10).fill(null); // Mudei para let para poder atualizar depois
+    let photos = Array(10).fill(null);
     let currentIndex = 0;
 
     const currentPhoto = document.getElementById('currentPhoto');
@@ -13,35 +13,48 @@ document.addEventListener('DOMContentLoaded', function() {
     const photoGrid = document.getElementById('photoGrid');
     const saveChangesBtn = document.getElementById('saveChanges');
 
+    function createPhotoCard(index) {
+        return `
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Momento ${index + 1}</h5>
+                    <div class="mb-3">
+                        <label class="form-label">Foto</label>
+                        <div class="preview-container mb-2 ${photos[index]?.url ? '' : 'd-none'}">
+                            <img class="preview-image" src="${photos[index]?.url || ''}" alt="Preview">
+                        </div>
+                        <div class="d-flex gap-2">
+                            <input type="file" 
+                                class="form-control" 
+                                accept="image/*" 
+                                id="photo-${index}">
+                            <button class="btn btn-danger btn-remove-photo ${photos[index]?.url ? '' : 'd-none'}" type="button">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Frase</label>
+                        <textarea 
+                            class="form-control" 
+                            rows="2" 
+                            id="caption-${index}"
+                            placeholder="Digite a frase para este momento..."
+                        >${photos[index]?.caption || ''}</textarea>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
     function initPhotoGrid() {
+        if (!photoGrid) return;
+        
         photoGrid.innerHTML = '';
         for (let i = 0; i < 10; i++) {
             const slot = document.createElement('div');
             slot.className = 'photo-slot';
-            slot.innerHTML = `
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Momento ${i + 1}</h5>
-                        <div class="mb-3">
-                            <label class="form-label">Foto</label>
-                            <div class="preview-container mb-2 ${photos[i]?.url ? '' : 'd-none'}">
-                                <img class="preview-image" src="${photos[i]?.url || ''}" alt="Preview">
-                            </div>
-                            <div class="d-flex gap-2">
-                                <input type="file" class="form-control" accept="image/*" id="photo-${i}">
-                                <button class="btn btn-danger btn-remove-photo ${photos[i]?.url ? '' : 'd-none'}" data-index="${i}">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Frase</label>
-                            <textarea class="form-control" rows="2" id="caption-${i}" 
-                                placeholder="Digite a frase para este momento...">${photos[i]?.caption || ''}</textarea>
-                        </div>
-                    </div>
-                </div>
-            `;
+            slot.innerHTML = createPhotoCard(i);
             photoGrid.appendChild(slot);
 
             const fileInput = slot.querySelector(`#photo-${i}`);
@@ -49,9 +62,15 @@ document.addEventListener('DOMContentLoaded', function() {
             const removeBtn = slot.querySelector('.btn-remove-photo');
             const previewContainer = slot.querySelector('.preview-container');
 
-            fileInput.addEventListener('change', (e) => handleFileSelect(e, i, previewContainer, removeBtn));
-            textArea.addEventListener('input', (e) => handleCaptionInput(e, i));
-            removeBtn.addEventListener('click', () => handleRemovePhoto(i, fileInput, previewContainer, removeBtn));
+            if (fileInput) {
+                fileInput.addEventListener('change', (e) => handleFileSelect(e, i, previewContainer, removeBtn));
+            }
+            if (textArea) {
+                textArea.addEventListener('input', (e) => handleCaptionInput(e, i));
+            }
+            if (removeBtn) {
+                removeBtn.addEventListener('click', () => handleRemovePhoto(i, fileInput, previewContainer, removeBtn));
+            }
         }
     }
 
@@ -64,11 +83,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 photos[index].url = e.target.result;
                 
                 const previewImg = previewContainer.querySelector('img');
-                previewImg.src = e.target.result;
-                previewContainer.classList.remove('d-none');
-                removeBtn.classList.remove('d-none');
-                
+                if (previewImg) {
+                    previewImg.src = e.target.result;
+                    previewContainer.classList.remove('d-none');
+                    removeBtn.classList.remove('d-none');
+                }
                 updateDisplay();
+                savePhotos();
             };
             reader.readAsDataURL(file);
         }
@@ -78,14 +99,16 @@ document.addEventListener('DOMContentLoaded', function() {
         photos[index] = photos[index] || {};
         photos[index].caption = e.target.value;
         updateDisplay();
+        savePhotos();
     }
 
     function handleRemovePhoto(index, fileInput, previewContainer, removeBtn) {
         photos[index] = { caption: photos[index]?.caption || '' };
-        fileInput.value = '';
+        if (fileInput) fileInput.value = '';
         previewContainer.classList.add('d-none');
         removeBtn.classList.add('d-none');
         updateDisplay();
+        savePhotos();
     }
 
     function updateDisplay() {
@@ -119,10 +142,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (savedPhotos) {
             photos = JSON.parse(savedPhotos);
             updateDisplay();
-            initPhotoGrid(); // Recarrega o grid com as fotos salvas
         }
     }
 
+    // Event Listeners
     prevBtn.addEventListener('click', () => {
         currentIndex = (currentIndex - 1 + photos.length) % photos.length;
         updateDisplay();
