@@ -16,38 +16,66 @@ function initPhotoGrid() {
         const slot = document.createElement('div');
         slot.className = 'photo-slot';
         slot.innerHTML = `
-            <div class="mb-3">
-                <label class="form-label">Foto ${i + 1}</label>
-                <input type="file" class="form-control" accept="image/*" data-index="${i}">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Frase ${i + 1}</label>
-                <textarea class="form-control" rows="2" data-index="${i}"></textarea>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Momento ${i + 1}</h5>
+                    
+                    <div class="mb-3">
+                        <label class="form-label d-block">Foto</label>
+                        <div class="preview-container mb-2 ${photos[i]?.url ? '' : 'd-none'}">
+                            <img class="preview-image" src="${photos[i]?.url || ''}" alt="Preview">
+                        </div>
+                        <div class="d-flex gap-2">
+                            <input type="file" 
+                                class="form-control" 
+                                accept="image/*" 
+                                data-index="${i}"
+                                id="photo-${i}">
+                            <button class="btn btn-danger btn-remove-photo ${photos[i]?.url ? '' : 'd-none'}"
+                                data-index="${i}">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Frase</label>
+                        <textarea class="form-control" 
+                            rows="2" 
+                            data-index="${i}"
+                            placeholder="Digite a frase para este momento...">${photos[i]?.caption || ''}</textarea>
+                    </div>
+                </div>
             </div>
         `;
         photoGrid.appendChild(slot);
 
-        // Eventos para os inputs
+        // Eventos
         const fileInput = slot.querySelector('input[type="file"]');
         const textArea = slot.querySelector('textarea');
+        const removeBtn = slot.querySelector('.btn-remove-photo');
+        const previewContainer = slot.querySelector('.preview-container');
 
-        fileInput.addEventListener('change', (e) => handleFileSelect(e, i));
+        fileInput.addEventListener('change', (e) => handleFileSelect(e, i, previewContainer, removeBtn));
         textArea.addEventListener('input', (e) => handleCaptionInput(e, i));
-
-        // Preencher texto se já existir
-        if (photos[i]) {
-            textArea.value = photos[i].caption;
-        }
+        removeBtn.addEventListener('click', () => handleRemovePhoto(i, fileInput, previewContainer, removeBtn));
     }
 }
 
-function handleFileSelect(e, index) {
+function handleFileSelect(e, index, previewContainer, removeBtn) {
     const file = e.target.files[0];
     if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
             photos[index] = photos[index] || {};
             photos[index].url = e.target.result;
+            
+            // Atualizar preview
+            const previewImg = previewContainer.querySelector('img');
+            previewImg.src = e.target.result;
+            previewContainer.classList.remove('d-none');
+            removeBtn.classList.remove('d-none');
+            
             updateDisplay();
         };
         reader.readAsDataURL(file);
@@ -58,6 +86,16 @@ function handleCaptionInput(e, index) {
     photos[index] = photos[index] || {};
     photos[index].caption = e.target.value;
     updateDisplay();
+}
+
+function handleRemovePhoto(index, fileInput, previewContainer, removeBtn) {
+    if (photos[index]) {
+        photos[index].url = null;
+        fileInput.value = '';
+        previewContainer.classList.add('d-none');
+        removeBtn.classList.add('d-none');
+        updateDisplay();
+    }
 }
 
 function updateDisplay() {
